@@ -217,7 +217,7 @@ def calculate(data_to_use):
 	
 
 	#Daten zurück auf 0 bis 24 formatieren
-	result = unscaled_test_results[99][0][0]*24
+	result = test_results[99][0]*24
 	return(result)
 	
 #def plot_network_predictions():
