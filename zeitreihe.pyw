@@ -54,10 +54,10 @@ def calculate(data_to_use):
 	for i in range(len(data_to_use)):
 		data_to_use[i] = data_to_use[i] /24
 
-	scaler = StandardScaler()
 	scaled_data = data_to_use.reshape(-1,1)
 
 
+	scaler = StandardScaler()
 
 	# Einteilen der Daten mit der window_data Funktion
 	X, y = window_data(scaled_data, 7) 
@@ -231,15 +231,7 @@ def calculate(data_to_use):
 #	plt.show()
 
 
-# Ein Fenster erstellen
-fenster = Tk()
-# Den Fenstertitel erstellen
-fenster.title("Time Prediction")
-fenster.geometry("500x100")
-fenster.iconbitmap("car.ico")
 
-
-file_path =  1
 
 #Button_action definieren
 def button_action():
@@ -271,8 +263,17 @@ def popupmsg(msg):
     label.pack()
     B1 = ttk.Button(popup, text="Okay", command=popup.destroy)
     B1.pack()
-    popup.mainloop()		
+    popup.mainloop()
+	
+# Ein Fenster erstellen
+fenster = Tk()
+# Den Fenstertitel erstellen
+fenster.title("Time Prediction")
+fenster.geometry("500x100")
+fenster.iconbitmap("car.ico")
 
+
+file_path =  1
 # Label und Buttons erstellen
 button_for_upload_label = Label(fenster, text="Um die Voraussage zu starten bitte eine Datei hochladen:\n")
 button_for_upload = Button(fenster, text="Datei angeben", command=button_action)
