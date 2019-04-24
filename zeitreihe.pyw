@@ -57,7 +57,7 @@ def calculate(data_to_use):
 	scaled_data = data_to_use.reshape(-1,1)
 
 
-	scaler = StandardScaler()
+	laenge = len(data_to_use)
 
 	# Einteilen der Daten mit der window_data Funktion
 	X, y = window_data(scaled_data, 7) 
@@ -65,13 +65,13 @@ def calculate(data_to_use):
 	#y: Testdaten: Die letzten 93 Werte, die als Vergleichswerte genutzt werden
 	# Aufteilung in Trainings- und Testset
 	#import numpy as np
-	X_train  = np.array(X[:99]) # 99: bis zur  99. Stelle 
-	y_train = np.array(y[:99]) # :99 ab 99. Stelle
+	X_train  = np.array(X[:laenge-1]) # 99: bis zur  99. Stelle 
+	y_train = np.array(y[:laenge-1]) # :99 ab 99. Stelle
 	# Die ersten 99 Werte werden zum Trainieren genutzt, um dann den 100. Wert vorauszusagen
 
 	# Die letzten 7 Werte, um den 100. Tag vorauszusagen
-	X_test = np.array(X[92:]) 
-	y_test = np.array(y[92:])
+	X_test = np.array(X[laenge-8:]) 
+	y_test = np.array(y[laenge-8:])
 
 	print("X_train size: {}".format(X_train.shape))
 	print("y_train size: {}".format(y_train.shape))
@@ -79,7 +79,7 @@ def calculate(data_to_use):
 	print("y_test size: {}".format(y_test.shape))
 
 	# Hier wird das Netz erstellt
-	batch_size = 2 # Nummer der Datenreihen, die durchlaufen werden, bevor das Modell geupdatet wird
+	batch_size = 1 # Nummer der Datenreihen, die durchlaufen werden, bevor das Modell geupdatet wird
 	window_size = 7 
 	hidden_layer = 220 # Units der LSTM-Zelle
 	clip_margin = 4 # Für Gradient clipping notwendig: wie genau soll das Netz sein?
@@ -206,16 +206,18 @@ def calculate(data_to_use):
 	
 	# Ergebnis wird festgehalten
 	test_results = [] 
-	for i in range(100):
-		if i >= 99: 
-			test_results.append(tests_new[i-99]) 
+
+	laenge = laenge-1
+	for i in range(laenge+1):
+		if i >= (laenge): 
+			test_results.append(tests_new[i-laenge]) 
 		else:
 			test_results.append(None)	
 
 	
 
 	#Daten zurück auf 0 bis 24 formatieren
-	result = test_results[99][0]*24
+	result = test_results[laenge][0]*24
 	return(result)
 	
 #def plot_network_predictions():
