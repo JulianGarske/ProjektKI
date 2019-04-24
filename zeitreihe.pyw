@@ -70,8 +70,8 @@ def calculate(data_to_use):
 	# Die ersten 99 Werte werden zum Trainieren genutzt, um dann den 100. Wert vorauszusagen
 
 	# Die letzten 7 Werte, um den 100. Tag vorauszusagen
-	X_test = np.array(X[laenge-8:]) 
-	y_test = np.array(y[laenge-8:])
+	X_test = np.array(X[laenge-8:laenge-1]) 
+	y_test = np.array(y[laenge-8:laenge-1])
 
 	print("X_train size: {}".format(X_train.shape))
 	print("y_train size: {}".format(y_train.shape))
