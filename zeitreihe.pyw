@@ -39,10 +39,10 @@ def window_data(data, window_size):
 	print(len(data))
 	
 	while (i + window_size) <= len(data) - 1:
-		X.append(data[i:i+window_size]) # X enthält 93 Arrays mit je 7 Werten
-		y.append(data[i+window_size]) # y enthält die Ergebnisse
+		X.append(data[i:i+window_size]) 
+		y.append(data[i+window_size]) 
 		
-		i += 1    # i geht bis 93, da window_size 7
+		i += 1  
 	return X, y  
 
 
@@ -61,10 +61,7 @@ def calculate(data_to_use):
 
 	# Einteilen der Daten mit der window_data Funktion
 	X, y = window_data(scaled_data, 7) 
-	#X: 93 Arrays, die Daten enthalten, die die Tage 7 bis 101 vorraussagen (Trainingsdaten)
-	#y: Testdaten: Die letzten 93 Werte, die als Vergleichswerte genutzt werden
 	# Aufteilung in Trainings- und Testset
-	#import numpy as np
 	X_train  = np.array(X[:laenge-1]) # 99: bis zur  99. Stelle 
 	y_train = np.array(y[:laenge-1]) # :99 ab 99. Stelle
 	# Die ersten 99 Werte werden zum Trainieren genutzt, um dann den 100. Wert vorauszusagen
@@ -151,13 +148,13 @@ def calculate(data_to_use):
 			
 		# Der letzte Output wird für die Prediction genutzt
 		outputs.append(tf.matmul(batch_output, weights_output) + bias_output_layer)
-	#outputs
+
 
 	# Loss wird definiert
 	losses = []
 
 	for i in range(len(outputs)):
-		losses.append(tf.losses.mean_squared_error(tf.reshape(targets[i], (-1, 1)), outputs[i]))
+		losses.append(tf.losses.mean_squared_error(tf.reshape(targets[i], (-1, 1)), outputs[i])) # Loss-Funktion: Mittlerer quadratischer Fehler
 		
 	loss = tf.reduce_mean(losses)
 
@@ -184,56 +181,23 @@ def calculate(data_to_use):
 			traind_scores.append(o)
 			ii += batch_size
 		if (i % 30) == 0:
-			print('Epoch {}/{}'.format(i, epochs), ' Current loss: {}'.format(np.mean(epoch_loss)))
-
-	sup =[]
-	for i in range(len(traind_scores)):
-		for j in range(len(traind_scores[i])):
-			sup.append(traind_scores[i][j][0])
+			print('Epoch {}/{}'.format(i, epochs), ' Current loss: {}'.format(np.mean(epoch_loss))) # durchschn. Abweichung in dieser Epoche
 		 
 	
 	# Daten werden berechnet
 	tests = []
 	i = 0
+	print(X_test)
 	while i+batch_size <= len(X_test):  
 		o = session.run([outputs],feed_dict={inputs:X_test[i:i+batch_size]})
 		i += batch_size
 		tests.append(o)
-	tests_new = []
-	for i in range(len(tests)):
-		for j in range(len(tests[i][0])):
-			tests_new.append(tests[i][0][j])
-	
-	# Ergebnis wird festgehalten
-	test_results = [] 
-
-	laenge = laenge-1
-	for i in range(laenge+1):
-		if i >= (laenge): 
-			test_results.append(tests_new[i-laenge]) 
-		else:
-			test_results.append(None)	
-
 	
 
 	#Daten zurück auf 0 bis 24 formatieren
-	result = test_results[laenge][0]*24
+	result = tests[0][0][0]*24
 	return(result)
 	
-#def plot_network_predictions():
-	#we now plot predictions from the network
-#	plt.figure(figsize=(16, 7))
-#	plt.title('Zeitanalyse')
-#	plt.xlabel('Tage')
-#	plt.ylabel('Uhrzeit')
-#	plt.plot(unscaled_data, label='Original data')
-#	plt.plot(unscaled_sup, label='Training data') # Was ist Training Data?
-#	plt.plot(unscaled_test_results, label='Testing data')
-#	plt.legend()
-#	plt.show()
-
-
-
 
 #Button_action definieren
 def button_action():
@@ -246,13 +210,16 @@ def button_action():
 		btc = pd.read_csv(file_path)
 		# nur die benötigte Spalte auswählen
 		data_to_use=btc['Startuhrzeit'].values
+		print(data_to_use)
 		result = calculate(data_to_use)
 		button_for_upload.config(state=NORMAL)
 		
-		hour = int(result)		
+		hour = int(result)	
+		result = str(result[0][0])
 		minutes_string = str(result).split(".")
-		minutes = int(float( "0." + minutes_string[1][0:2])*60)
-		
+		minutes = int(float( "0." + minutes_string[1][0:1])*60)
+		if (len(str(minutes)) == 1):
+			minutes = "0" + str(minutes)
 		time = "Die Standheizung soll um " + str(hour) + ":" + str(minutes) + " Uhr gestartet werden."
 		
 		popupmsg(time)
