@@ -36,7 +36,6 @@ def window_data(data, window_size):
 	y = []
 	
 	i = 0
-	print(len(data))
 	
 	while (i + window_size) <= len(data) - 1:
 		X.append(data[i:i+window_size]) 
@@ -52,7 +51,7 @@ def calculate(data_to_use):
 
 	#Skalieren der Daten, sodass sie zwischen 0 und 1 liegen
 	for i in range(len(data_to_use)):
-		data_to_use[i] = data_to_use[i] /24
+		data_to_use[i] = data_to_use[i] / 24
 
 	scaled_data = data_to_use.reshape(-1,1)
 
@@ -70,10 +69,10 @@ def calculate(data_to_use):
 	X_test = np.array(X[laenge-8:laenge-1]) 
 	y_test = np.array(y[laenge-8:laenge-1])
 
-	print("X_train size: {}".format(X_train.shape))
-	print("y_train size: {}".format(y_train.shape))
-	print("X_test size: {}".format(X_test.shape)) 
-	print("y_test size: {}".format(y_test.shape))
+	#print("X_train size: {}".format(X_train.shape))
+	#print("y_train size: {}".format(y_train.shape))
+	#print("X_test size: {}".format(X_test.shape)) 
+	#print("y_test size: {}".format(y_test.shape))
 
 	# Hier wird das Netz erstellt
 	batch_size = 1 # Nummer der Datenreihen, die durchlaufen werden, bevor das Modell geupdatet wird
@@ -187,7 +186,6 @@ def calculate(data_to_use):
 	# Daten werden berechnet
 	tests = []
 	i = 0
-	print(X_test)
 	while i+batch_size <= len(X_test):  
 		o = session.run([outputs],feed_dict={inputs:X_test[i:i+batch_size]})
 		i += batch_size
@@ -210,7 +208,6 @@ def button_action():
 		btc = pd.read_csv(file_path)
 		# nur die benötigte Spalte auswählen
 		data_to_use=btc['Startuhrzeit'].values
-		print(data_to_use)
 		result = calculate(data_to_use)
 		button_for_upload.config(state=NORMAL)
 		
@@ -221,6 +218,7 @@ def button_action():
 		if (len(str(minutes)) == 1):
 			minutes = "0" + str(minutes)
 		time = "Die Standheizung soll um " + str(hour) + ":" + str(minutes) + " Uhr gestartet werden."
+		print(time)
 		
 		popupmsg(time)
 
