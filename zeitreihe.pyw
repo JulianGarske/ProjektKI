@@ -77,10 +77,10 @@ def calculate(data_to_use):
 	# Hier wird das Netz erstellt
 	batch_size = 1 # Nummer der Datenreihen, die durchlaufen werden, bevor das Modell geupdatet wird
 	window_size = 7 
-	hidden_layer = 220 # Units der LSTM-Zelle
+	hidden_layer = 250 # Units der LSTM-Zelle
 	clip_margin = 4 # Für Gradient clipping notwendig: wie genau soll das Netz sein?
 	learning_rate = 0.001 # Wie viel ändert sich das Model bei fehlern?
-	epochs = 200 # Nummer der kompletten Durchläufe bis zum Ende des Trainings
+	epochs = 300 # Nummer der kompletten Durchläufe bis zum Ende des Trainings
 
 	
 	#Definition der Platzhalter
